@@ -9,16 +9,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "format": "prettier --write \"*.{ts,js,json}\" \"{routes,controllers,models,middlewares,config,utils}/**/*.{ts,js,json}\"",
-    "format:check": "prettier --check \"*.{ts,js,json}\" \"{routes,controllers,models,middlewares,config,utils}/**/*.{ts,js,json}\""
+    "lint": "eslint . --ext .ts,.js --max-warnings 0",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write \"**/*.{ts,js,json}\" \"!node_modules\" \"!dist\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json}\" \"!node_modules\" \"!dist\""
   },
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.1.2"
   },
   "devDependencies": {
-    "prettier": "^3.7.4"
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.7.4",
+    "typescript": "^5.5.4"
   }
 }

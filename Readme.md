@@ -1,5 +1,12 @@
 # Welcome to Nutrilens
 
+A nutrition tracking application with automated code quality checks.
+
+## Project Structure
+
+````markdown
+# Welcome to Nutrilens
+
 ## CI/CD Pipeline
 
 This project includes automated checks for code quality:
@@ -37,3 +44,4 @@ The CI workflow runs automatically on:
 - Pull requests to `main` or `develop` branches
 
 All checks must pass before merging.
+````

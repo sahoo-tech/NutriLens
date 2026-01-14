@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Camera,
   Upload,
   History,
   Flame,
@@ -15,7 +14,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeToggle } from './components/ThemeToggle';
+import { Navbar } from './components/Navbar';
+import { Hero } from './components/Hero';
 import { analyzeImage, getHistory, getImageUrl } from './api';
 import type { MealData } from './api';
 
@@ -105,46 +105,11 @@ const App: React.FC = () => {
   return (
     <div className='min-h-screen pb-20 transition-colors duration-300'>
       {/* Navbar */}
-      <nav className='fixed top-0 w-full z-50 glass'>
-        <div className='max-w-7xl mx-auto px-4 h-16 flex items-center justify-between'>
-          <div className='flex items-center space-x-2'>
-            <div className='bg-brand-primary p-2 rounded-lg transition-colors'>
-              <Camera className='w-5 h-5 text-white' />
-            </div>
-            <span className='text-xl font-bold tracking-tight'>
-              Nutri<span className='text-brand-primary transition-colors'>Lens</span>
-            </span>
-          </div>
-          <div className='flex items-center space-x-4'>
-            <ThemeToggle />
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className='p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors'
-              aria-label='History'
-            >
-              <History className='w-6 h-6 text-gray-600 dark:text-gray-400 hover:text-brand-primary transition-colors' />
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar showHistory={showHistory} setShowHistory={setShowHistory} />
 
       <main className='max-w-4xl mx-auto px-4 pt-32'>
         {/* Hero Section */}
-        {!preview && !result && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className='text-center space-y-6 mb-12'
-          >
-            <h1 className='text-5xl md:text-7xl font-extrabold tracking-tight'>
-              Know What You <span className='gradient-text'>Eat.</span>
-            </h1>
-            <p className='text-lg md:text-xl max-w-2xl mx-auto opacity-70'>
-              Snap a photo of your meal and get instant nutritional insights powered by advanced AI.
-              Track calories, macros, and get personalized recommendations.
-            </p>
-          </motion.div>
-        )}
+        {!preview && !result && <Hero />}
 
         {/* Upload/Preview Section */}
         <div className='space-y-8'>

@@ -71,7 +71,11 @@ const App: React.FC = () => {
     } catch (err) {
       console.error('Analysis failed', err);
       const errorMessage =
-        err instanceof Error ? err.message : typeof err === 'string' ? err : 'An unknown error occurred.';
+        err instanceof Error
+          ? err.message
+          : typeof err === 'string'
+            ? err
+            : 'An unknown error occurred.';
       alert(`Analysis failed: ${errorMessage}`);
     } finally {
       setLoading(false);

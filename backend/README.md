@@ -25,7 +25,7 @@ This is the backend for the NutriLens application, an AI-powered nutrition assis
     ```
 
 2.  **Environment Variables**:
-    Create a `.env` file in the `backend` directory (or rely on default hardcoded values for dev).
+    Create a `.env` file in the `backend` directory. The `GEMINI_API_KEY` environment variable is required and has no default value.
     ```env
     PORT=5000
     MONGO_URI=mongodb://localhost:27017/nutrilens

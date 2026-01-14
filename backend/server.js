@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -20,11 +19,8 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Database Connection
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/nutrilens';
-mongoose
-    .connect(mongoURI)
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => console.error('MongoDB connection error:', err));
+const connectDB = require('./config/db');
+connectDB();
 
 // Routes
 const analyzeRoutes = require('./routes/analyze');

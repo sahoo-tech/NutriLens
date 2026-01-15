@@ -84,7 +84,6 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
             {result ? 'Here is your nutritional breakdown' : 'Ensure your food is clearly visible'}
           </p>
         </div>
-        {/* Spacer to balance the button width if needed, or just let title center in remaining space */}
       </div>
 
       <div className='relative aspect-video rounded-3xl overflow-hidden glass p-2'>

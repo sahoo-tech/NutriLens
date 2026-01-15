@@ -40,7 +40,7 @@ Micronutrients:
 ${
   result.micronutrients
     ? Object.entries(result.micronutrients)
-        .map(([k, v]) => `- ${k.replace(/([A-Z])/g, ' $1').trim()}: ${v}mg`)
+        .map(([k, v]) => `- ${k.replace(/([A-Z])/g, ' $1').trim()}: ${v}`)
         .join('\n')
     : 'N/A'
 }

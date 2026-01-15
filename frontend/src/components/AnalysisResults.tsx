@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { NutrientCard } from './NutrientCard';
+import { ExportButton } from './ExportButton';
 import type { MealData } from '../api';
 
 interface AnalysisResultsProps {
@@ -67,8 +68,11 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ result }) => {
             )}
           </div>
         </div>
-        <div className='text-gray-600 dark:text-gray-400 text-sm'>
-          Analyzed on {new Date(result.createdAt).toLocaleDateString()}
+        <div className='flex items-center gap-4'>
+          <div className='text-gray-600 dark:text-gray-400 text-sm hidden md:block'>
+            Analyzed on {new Date(result.createdAt).toLocaleDateString()}
+          </div>
+          <ExportButton result={result} />
         </div>
       </div>
 
@@ -91,6 +95,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ result }) => {
               unit='g'
               color='hover:!border-blue-500'
               textColor='text-blue-500'
+              detail={`${result.nutritionBreakdown?.proteinPercent}% of total cal`}
             />
             <NutrientCard
               icon={Wheat}
@@ -99,6 +104,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ result }) => {
               unit='g'
               color='hover:!border-yellow-500'
               textColor='text-yellow-500'
+              detail={`${result.nutritionBreakdown?.carbsPercent}% of total cal`}
             />
             <NutrientCard
               icon={Droplets}
@@ -107,6 +113,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ result }) => {
               unit='g'
               color='hover:!border-pink-500'
               textColor='text-pink-500'
+              detail={`${result.nutritionBreakdown?.fatPercent}% of total cal`}
             />
           </div>
 

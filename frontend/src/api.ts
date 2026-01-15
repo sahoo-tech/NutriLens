@@ -22,6 +22,11 @@ export interface MealData {
     vitaminC: number;
     calcium: number;
     iron: number;
+    potassium?: number;
+    magnesium?: number;
+    zinc?: number;
+    vitaminD?: number;
+    vitaminB12?: number;
   };
   nutritionBreakdown: {
     proteinPercent: number;

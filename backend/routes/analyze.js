@@ -5,6 +5,11 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const cloudinary = require('cloudinary').v2;
 const Meal = require('../models/Meal');
 
+// Validate required environment variables
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error('GEMINI_API_KEY environment variable is required');
+}
+
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -12,28 +17,24 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Configure Multer (Memory Storage)
+// Configure Multer with enhanced security
 const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50 MB max file size
-    files: 1, // only one file expected for this route
+    fileSize: 8 * 1024 * 1024, // 8 MB max file size
+    files: 1,
   },
   fileFilter: (req, file, cb) => {
-    const allowedMimeTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/webp',
-    ];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(
-        new Error(
-          'Invalid file type. Only JPEG, PNG, GIF, and WEBP are allowed.'
-        )
-      );
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+    
+    const fileExtension = file.originalname.toLowerCase().split('.').pop();
+    
+    if (!allowedMimeTypes.includes(file.mimetype) || 
+        !allowedExtensions.includes(`.${fileExtension}`)) {
+      return cb(new Error('Invalid file type'));
     }
     cb(null, true);
   },
@@ -61,10 +62,12 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'nutrilens' },
           (error, result) => {
-            if (result) {
+            if (error) {
+              reject(error);
+            } else if (result) {
               resolve(result.secure_url);
             } else {
-              reject(error);
+              reject(new Error('Upload failed'));
             }
           }
         );
@@ -119,15 +122,7 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
       },
       "analysis": "Detailed analysis of the food's nutritional value, preparation method, and health implications (2-3 sentences)",
       "recommendation": "What to eat next to balance this meal nutritionally (be specific with food suggestions)"
-    }
-
-    Notes:
-    - All gram values should be in grams (g)
-    - Vitamins and minerals in milligrams (mg) or appropriate units (mcg for certain vitamins if standard, but preferably normalize to mg or specify unit if implicit constraints allow - however schema implies Number so stick to standard numerical values, e.g. mg for Sodium/Potassium/Calcium/Iron/Magnesium/Zinc. Vitamin A/D/B12/C usually mg or mcg. Provide best estimate in standard units.)
-    - Percentages should be whole numbers (0-100)
-    - healthScore should be 0-100
-    - Be accurate with portion size estimation based on the User Context provided.
-    - Provide NON-ZERO estimates for micronutrients if reasonable trace amounts exist. Do not just zero them out unless completely absent.`;
+    }`;
 
     const part = {
       inlineData: {
@@ -144,22 +139,26 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
     const response = await result.response;
     let text = response.text();
 
-    console.log('Gemini Raw Response:', text);
-
-    // Clean up JSON string if it contains markdown code blocks
-    text = text
-      .replace(/```json/g, '')
-      .replace(/```/g, '')
-      .trim();
+    // Clean up JSON string
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
     let analysisData;
     try {
       analysisData = JSON.parse(text);
     } catch (e) {
-      console.error('Failed to parse JSON:', e);
       analysisData = {
         foodName: 'Unknown',
+        servingSize: 'Unknown',
         isHealthy: false,
+        calories: 0,
+        macronutrients: { protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0 },
+        micronutrients: {
+          sodium: 0, cholesterol: 0, vitaminA: 0, vitaminC: 0,
+          calcium: 0, iron: 0, potassium: 0, magnesium: 0,
+          zinc: 0, vitaminD: 0, vitaminB12: 0
+        },
+        nutritionBreakdown: { proteinPercent: 0, carbsPercent: 0, fatPercent: 0 },
+        healthMetrics: { healthScore: 0, benefits: [], concerns: [] },
         analysis: 'Could not parse AI response.',
         recommendation: 'Try taking a clearer photo.',
       };
@@ -178,37 +177,30 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
       data: newMeal,
     });
   } catch (error) {
-    console.error('Error processing image:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Analysis error:', error.message);
+    res.status(500).json({ error: 'Analysis failed' });
   }
 });
 
 router.get('/history', async (req, res) => {
   try {
     const { limit, skip } = req.query;
-    const parsedLimit = parseInt(limit, 10) || 20;
-    const parsedSkip = parseInt(skip, 10) || 0;
-
-    // Cap limit to prevent excessive data transfer
-    const finalLimit = Math.min(parsedLimit, 100);
+    const parsedLimit = Math.min(parseInt(limit, 10) || 20, 50); // Cap at 50
+    const parsedSkip = Math.max(parseInt(skip, 10) || 0, 0);
 
     const meals = await Meal.find()
       .sort({ createdAt: -1 })
       .skip(parsedSkip)
-      .limit(finalLimit);
+      .limit(parsedLimit);
 
     const total = await Meal.countDocuments();
 
     res.json({
       data: meals,
-      pagination: {
-        total,
-        limit: finalLimit,
-        skip: parsedSkip,
-      },
+      pagination: { total, limit: parsedLimit, skip: parsedSkip },
     });
   } catch (error) {
-    console.error('Error fetching history:', error);
+    console.error('History fetch error:', error.message);
     res.status(500).json({ error: 'Failed to fetch history' });
   }
 });
@@ -218,7 +210,7 @@ router.delete('/history', async (req, res) => {
     await Meal.deleteMany({});
     res.json({ message: 'History cleared' });
   } catch (error) {
-    console.error('Error clearing history:', error);
+    console.error('History clear error:', error.message);
     res.status(500).json({ error: 'Failed to clear history' });
   }
 });

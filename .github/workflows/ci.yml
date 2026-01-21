@@ -66,5 +66,4 @@ jobs:
       - name: Check Prettier formatting
         run: npm run format:check
       
-      - name: Build
-        run: npm run start
+

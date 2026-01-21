@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { History } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa6';
 import { ThemeToggle } from './ThemeToggle';
@@ -32,11 +31,13 @@ export const Navbar = ({ showHistory, setShowHistory }: NavbarProps) => {
                border border-[var(--glass-border)]
                text-sm font-medium
                text-gray-700 dark:text-gray-300
-               hover:bg-black/5 dark:hover:bg-white/10
-               hover:text-brand-primary
-               transition-colors'
+               transition-all duration-300
+               hover:bg-gray-900 dark:hover:bg-white/10
+               hover:text-white hover:border-white/50
+               hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:scale-105'
           >
-            <FaGithub className='text-base' />⭐ Star our Repo
+            <FaGithub className='text-base' />
+            Star our Repo
           </a>
 
           <ThemeToggle />

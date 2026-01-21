@@ -1,13 +1,21 @@
-/* eslint-disable prettier/prettier */
 import { FaGithub, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 
 const Footer = () => {
   return (
     <footer className='mt-20 border-t border-black/10 dark:border-white/15 bg-[var(--bg-color)]'>
-      <div className='mx-auto max-w-7xl px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10'>
+      <div className='mx-auto max-w-7xl px-6 py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12'>
         {/* Brand */}
         <div>
-          <img src='/Nutrilens_logo.png' alt='NutriLens Logo' className='w-20 mb-3' />
+          <div className='flex items-center space-x-2 mb-3'>
+            <img
+              src='/Nutrilens_logo.png'
+              alt='NutriLens Logo'
+              className='w-10 h-10 object-contain'
+            />
+            <span className='text-xl font-bold tracking-tight'>
+              Nutri<span className='text-[var(--primary-color)]'>Lens</span>
+            </span>
+          </div>
           <p className='text-sm text-slate-500 dark:text-slate-400 max-w-xs'>
             AI-powered nutrition insights to help you make healthier food choices.
           </p>
@@ -69,7 +77,7 @@ const Footer = () => {
           <div className='flex gap-4 text-xl text-slate-500 dark:text-slate-400'>
             <a
               href='https://github.com/your-org'
-              className='transition-colors hover:text-[var(--primary-color)]'
+              className='transition-colors hover:text-black dark:hover:text-white'
             >
               <FaGithub />
             </a>
@@ -86,7 +94,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className='text-center text-xs py-4 border-t border-black/10 dark:border-white/15 text-slate-400'>
+      <div className='text-center text-xs py-4 text-slate-400'>
         © 2026 NutriLens. All rights reserved.
       </div>
     </footer>

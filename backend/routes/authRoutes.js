@@ -1,9 +1,12 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
+
+const authMiddleware = require('../middleware/authMiddleware');
 const { register, login, logout } = require('../controller/authController');
 
 const router = express.Router();
 
+// Auth-specific rate limiter
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -13,10 +16,13 @@ const authLimiter = rateLimit({
     'Too many authentication attempts from this IP, please try again later.',
 });
 
+// Public auth routes
 router.post('/register', authLimiter, register);
 router.post('/login', authLimiter, login);
 router.post('/logout', authLimiter, logout);
-router.get('/dashboard', authLimiter, authMiddleware, (req, res) => {
+
+// 🔒 Protected route
+router.get('/dashboard', authMiddleware, (req, res) => {
   res.json({
     message: 'Welcome to dashboard',
     user: req.user,

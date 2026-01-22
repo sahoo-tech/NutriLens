@@ -1,14 +1,21 @@
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+const app = express();
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const path = require('path');
+
 const fs = require('fs');
 
+const authRoutes = require('./routes/authRoutes');
+
 // Validate required environment variables
-const requiredEnvVars = ['GEMINI_API_KEY', 'MONGO_URI'];
+const requiredEnvVars = ['GEMINI_API_KEY', 'MONGO_URI', 'JWT_SECRET'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.error(`Missing required environment variable: ${envVar}`);
@@ -16,7 +23,6 @@ for (const envVar of requiredEnvVars) {
   }
 }
 
-const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Security middleware
@@ -59,6 +65,7 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.use('/api/auth', authRoutes);
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
 try {

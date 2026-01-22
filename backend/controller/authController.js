@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { teamName, email, password } = req.body;
+    const { userName, email, password } = req.body;
 
-    if (!teamName || !email || !password) {
+    if (!userName || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
     }
 
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
-      teamName,
+      userName,
       email,
       password: hashedPassword
     });
@@ -31,6 +31,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: "Registration failed", error: err.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {

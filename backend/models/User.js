@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  teamName: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
+  userName: {
+  type: String,
+  required: true,
+  unique: true,
+  trim: true
   },
   email: {
     type: String,

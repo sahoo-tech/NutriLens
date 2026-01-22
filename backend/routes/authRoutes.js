@@ -1,28 +1,25 @@
-
-const express = require("express");
-const rateLimit = require("express-rate-limit");
-const { register, login, logout } = require("../controller/authController");
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+const { register, login, logout } = require('../controller/authController');
 
 const router = express.Router();
 
-
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message:
-    "Too many authentication attempts from this IP, please try again later."
+    'Too many authentication attempts from this IP, please try again later.',
 });
 
-
-router.post("/register", authLimiter, register);
-router.post("/login", authLimiter, login);
-router.post("/logout", authLimiter, logout);
-router.get("/dashboard",authLimiter, authMiddleware, (req, res) => {
+router.post('/register', authLimiter, register);
+router.post('/login', authLimiter, login);
+router.post('/logout', authLimiter, logout);
+router.get('/dashboard', authLimiter, authMiddleware, (req, res) => {
   res.json({
-    message: "Welcome to dashboard",
-    user: req.user
+    message: 'Welcome to dashboard',
+    user: req.user,
   });
 });
 

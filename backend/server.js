@@ -46,7 +46,10 @@ const uploadLimiter = rateLimit({
 });
 
 // CORS configuration
-const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:5173')
+const allowedOrigins = (
+  process.env.CORS_ALLOWED_ORIGINS ||
+  'http://localhost:3000,http://localhost:5173'
+)
   .split(',')
   .map(origin => origin.trim())
   .filter(origin => origin.length > 0);
@@ -56,7 +59,10 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+    if (
+      allowedOrigins.indexOf(origin) !== -1 ||
+      process.env.NODE_ENV !== 'production'
+    ) {
       callback(null, true);
     } else {
       logger.warn(`Origin ${origin} not allowed by CORS`);
@@ -65,9 +71,13 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+  ],
 };
-
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));

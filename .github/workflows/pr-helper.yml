@@ -10,6 +10,9 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Respond to Opened PR
         if: github.event.action == 'opened'
         env:

@@ -56,7 +56,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ result }) => {
       carbs: Math.round((origMacros.carbs * multiplier) * 10) / 10,
       fat: Math.round((origMacros.fat * multiplier) * 10) / 10,
     };
-  }, [portion, result]);
+  }, [portion, result, localOriginalNutrition]);
 
   // Fallback for backward compatibility (values driven by portion-adjusted recalc)
   const protein = recalc.protein;

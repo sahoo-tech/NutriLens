@@ -26,7 +26,7 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      await login(email.trim(), password);
+      await login({ email: email.trim(), password });
       setLoading(false);
       const redirectState = location.state as { from?: string; payload?: unknown };
       const redirectTo = redirectState?.from || '/analysis';

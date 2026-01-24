@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.user.login != github.repository_owner
     permissions:
+      contents: read
       issues: write
       pull-requests: read
     steps:
@@ -25,7 +26,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           # 1. Assign to Owner
-          gh issue edit "$ISSUE_NUMBER" --add-assignee "$OWNER"
+          gh issue edit "$ISSUE_NUMBER" --add-assignee "$OWNER" || echo "Failed to assign owner"
 
           # 2. Keyword-based Labeling
           # Convert title and body to lowercase for matching
@@ -50,10 +51,10 @@ jobs:
           
           # 4. Search for related records
           RELATED_ISSUES=$(gh search issues "$ISSUE_TITLE" --repo "$REPO" --limit 10 --json number,title,url | \
-            jq -r --arg current "$ISSUE_NUMBER" '.[] | select(.number != ($current | tonumber)) | "- [#" + (.number | toString) + "](" + .url + "): " + .title' | head -n 5)
+            jq -r --arg current "$ISSUE_NUMBER" '.[] | select(.number != ($current | tonumber)) | "- [#" + (.number | tostring) + "](" + .url + "): " + .title' | head -n 5 || true)
 
           RELATED_PRS=$(gh search prs "$ISSUE_TITLE" --repo "$REPO" --limit 5 --json number,title,url | \
-            jq -r '.[] | "- [#" + (.number | toString) + "](" + .url + "): " + .title')
+            jq -r '.[] | "- [#" + (.number | tostring) + "](" + .url + "): " + .title' || true)
 
           # 5. Build the final response
           FINAL_MSG="$WELCOME_MSG"

@@ -12,6 +12,8 @@ import type { MealData } from './api';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import { RedirectIfAuthenticated, RequireAuth } from './components/RouteGuards';
+import Chatbot from './components/Chatbot/Chatbot';
+
 const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,6 +92,7 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <Footer />
+      <Chatbot />
     </div>
   );
 };

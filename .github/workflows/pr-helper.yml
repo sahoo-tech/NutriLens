@@ -1,7 +1,7 @@
 name: PR Helper & Engagement
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, closed]
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           # 1. Assign to Owner
-          gh pr edit "$PR_NUMBER" --add-assignee "$OWNER"
+          gh pr edit "$PR_NUMBER" --add-assignee "$OWNER" || echo "Failed to assign owner"
 
           # 2. Keyword-based Labeling
           CONTENT=$(echo "$PR_TITLE $PR_BODY" | tr '[:upper:]' '[:lower:]')

@@ -27,14 +27,14 @@ export const Login = () => {
 
     try {
       await login(email.trim(), password);
-      setLoading(false);
       const redirectState = location.state as { from?: string; payload?: unknown };
       const redirectTo = redirectState?.from || '/analysis';
       navigate(redirectTo, { replace: true, state: redirectState?.payload });
     } catch (err) {
-      setLoading(false);
       const message = err instanceof Error ? err.message : 'Unable to login. Please try again.';
       setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 

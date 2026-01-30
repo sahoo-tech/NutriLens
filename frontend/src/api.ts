@@ -118,3 +118,19 @@ export const getImageUrl = (imagePath: string) => {
   const baseUrl = API_URL.replace('/api', '');
   return `${baseUrl}/uploads/${imagePath}`;
 };
+
+export const sendChatMessage = async (
+  message: string,
+): Promise<{
+  text: string;
+  report?: {
+    carbs: number;
+    protein: number;
+    fats: number;
+  };
+  healthTip?: string;
+  info?: string;
+}> => {
+  const response = await axios.post(`${API_URL}/chat`, { message });
+  return response.data;
+};

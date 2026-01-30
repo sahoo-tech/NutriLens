@@ -34,7 +34,7 @@ Return ONLY valid JSON in the following format (all numeric values MUST be numbe
 {
   "foodName": "...",
     "servingSize": "...",
-  "isHealthy": true/false,
+  "isHealthy": true,
   "calories": 0,
   "macronutrients": {
     "protein": 0,

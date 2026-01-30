@@ -69,7 +69,6 @@ Return ONLY valid JSON in the following format (all numeric values MUST be numbe
   "analysis": "Detailed analysis of the food's nutritional value, preparation method, and health implications (2-3 sentences)",
   "recommendation": "What to eat next to balance this meal nutritionally (be specific with food suggestions)"
 }
-   }
 Notes:
 - All gram values should be in grams (g)
 - Vitamins and minerals in milligrams (mg) or appropriate units (mcg for certain vitamins if standard, but preferably normalize to mg or specify unit if implicit constraints allow - however schema implies Number so stick to standard numerical values, e.g. mg for Sodium/Potassium/Calcium/Iron/Magnesium/Zinc. Vitamin A/D/B12/C usually mg or mcg. Provide best estimate in standard units.)

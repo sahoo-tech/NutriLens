@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
+import chatRoute from "./routes/chat.route.js";
 // Validate required environment variables
 const requiredEnvVars = ['GEMINI_API_KEY', 'MONGO_URI'];
 for (const envVar of requiredEnvVars) {

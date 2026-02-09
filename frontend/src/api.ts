@@ -6,6 +6,22 @@ export interface MealData {
   _id: string;
   foodName: string;
   servingSize?: string;
+  portionEstimate?: {
+    category?: string;
+    grams?: number;
+    multiplier?: number;
+    confidence?: number;
+  };
+  originalNutrition?: {
+    calories?: number;
+    macronutrients?: {
+      protein?: number;
+      carbs?: number;
+      fat?: number;
+      fiber?: number;
+      sugar?: number;
+    };
+  };
   isHealthy: boolean;
   calories: number;
   macronutrients: {
@@ -87,10 +103,34 @@ export const clearHistory = async (): Promise<void> => {
   await axios.delete(`${API_URL}/history`);
 };
 
+export const savePortionAdjustment = async (
+  mealId: string,
+  portion: MealData['portionEstimate'],
+) => {
+  const response = await axios.patch(`${API_URL}/history/${mealId}/portion`, { portion });
+  return response.data.data;
+};
+
 export const getImageUrl = (imagePath: string) => {
   if (imagePath.startsWith('http')) {
     return imagePath;
   }
   const baseUrl = API_URL.replace('/api', '');
   return `${baseUrl}/uploads/${imagePath}`;
+};
+
+export const sendChatMessage = async (
+  message: string,
+): Promise<{
+  text: string;
+  report?: {
+    carbs: number;
+    protein: number;
+    fats: number;
+  };
+  healthTip?: string;
+  info?: string;
+}> => {
+  const response = await axios.post(`${API_URL}/chat`, { message });
+  return response.data;
 };

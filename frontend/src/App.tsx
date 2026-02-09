@@ -8,6 +8,9 @@ import { Analysis } from './pages/Analysis';
 import { getHistory, clearHistory } from './api';
 import type { MealData } from './api';
 import Footer from './components/Footer';
+import Chatbot from './components/Chatbot/Chatbot';
+import ScrollToTop from './components/ScrollToTop';
+
 const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,6 +77,8 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <Footer />
+      <Chatbot />
+      <ScrollToTop />
     </div>
   );
 };

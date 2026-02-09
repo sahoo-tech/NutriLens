@@ -4,7 +4,17 @@
 
 # 🥗 NutriLens - AI-Powered Nutrition Tracker
 
-NutriLens is a modern web application that leverages the power of Artificial Intelligence to analyze food images and provide detailed nutritional information. Simply upload a photo of your meal, and let Gemini AI break down the calories, protein, carbs, and fats for you.
+NutriLens is a modern web application that leverages the power of Artificial Intelligence to analyze food images and provide detailed nutritional information. Simply upload a photo of your meal, and let AI break down the calories, protein, carbs, and fats for you.
+
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/Yugenjr/GrindMap)
+[![GitHub Stars](https://img.shields.io/github/stars/Yugenjr/GrindMap?style=social)](https://github.com/Yugenjr/GrindMap)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
 <div align="center">
   <video src="./screenshots/Demo_Video.mp4" width="100%" controls></video>
@@ -30,6 +40,27 @@ NutriLens is a modern web application that leverages the power of Artificial Int
 
 ### History 
 ![History](./screenshots/history.png) 
+
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    A[User] --> B[Frontend<br/>React/Vite]
+    B --> C[Backend<br/>Express.js]
+    C --> D[MongoDB<br/>Database]
+    C --> E[Google Gemini API<br/>AI Service]
+    E --> C
+    D --> C
+```
+
+The application follows a client-server architecture:
+
+- **Frontend**: Built with React and Vite, handles user interactions, image uploads, and displays analysis results.
+- **Backend**: Express.js server that processes API requests, manages user authentication, stores analysis history, and integrates with AI services.
+- **Database**: MongoDB for storing user data, authentication details, and nutritional analysis history.
+- **AI Service**: Google Gemini API for analyzing food images and extracting nutritional information.
+
 
 
 ## 🛠️ Tech Stack

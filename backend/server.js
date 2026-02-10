@@ -10,8 +10,12 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const path = require('path');
+const chatRoute = require('./routes/chat.route');
+const fs = require('fs');
+const chatRoute = require('./routes/chat.route');
 
 const fs = require('fs');
+
 const logger = require('./utils/logger');
 
 const authRoutes = require('./routes/authRoutes');
